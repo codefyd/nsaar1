@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d6efd">
+  <title>نظام مجمع حلق تحفيظ القرآن</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="globalLoader" class="global-loader d-none">
+    <div class="spinner-border text-light" role="status"></div>
+    <div class="mt-3 fw-bold">جاري التحميل...</div>
+  </div>
+
+  <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#/home"><i class="fa-solid fa-book-quran text-primary ms-2"></i>نظام مجمع الحلق</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="#/home">الرئيسية</a></li>
+          <li class="nav-item"><a class="nav-link" href="#/register">التسجيل والقبول</a></li>
+          <li class="nav-item"><a class="nav-link" href="#/student">بيانات الطالب</a></li>
+          <li class="nav-item"><a class="nav-link" href="#/achievements">إنجازات المجمع</a></li>
+          <li class="nav-item"><a class="nav-link" href="#/staff">بوابة العاملين</a></li>
+        </ul>
+        <div class="d-flex gap-2 me-lg-3">
+          <button class="btn btn-primary btn-sm" id="openLoginBtn"><i class="fa-solid fa-right-to-bracket ms-1"></i>دخول العاملين</button>
+          <button class="btn btn-outline-danger btn-sm d-none" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket ms-1"></i>خروج</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section id="homeView" class="view-section">
+      <div class="hero">
+        <div class="container">
+          <div class="hero-card">
+            <div class="row g-4 align-items-center">
+              <div class="col-lg-7">
+                <div class="hero-badge"><i class="fa-solid fa-shield-heart"></i>منصة موحدة للمجمع</div>
+                <h1 class="hero-title">إدارة التسجيل والطلاب والإنذارات والتواصل والإنجازات في واجهة واحدة</h1>
+                <p class="hero-desc">واجهة عامة للطلاب وأولياء الأمور، وبوابة تشغيل داخلية للإدارة والمشرفين والمعلمين، مع إعدادات مركزية، سجل عمليات، تصدير CSV وExcel، ورسائل واتساب مبنية من القوالب والمتغيرات.</p>
+                <div class="hero-actions">
+                  <a href="#/register" class="btn btn-primary btn-lg"><i class="fa-solid fa-user-plus ms-1"></i>تسجيل طالب جديد</a>
+                  <a href="#/student" class="btn btn-outline-primary btn-lg"><i class="fa-solid fa-id-card ms-1"></i>عرض بيانات الطالب</a>
+                  <a href="#/achievements" class="btn btn-outline-success btn-lg"><i class="fa-solid fa-trophy ms-1"></i>إنجازات المجمع</a>
+                </div>
+              </div>
+              <div class="col-lg-5">
+                <div class="row g-3">
+                  <div class="col-12"><div class="kpi-card quick-shadow"><div class="bg-icon-float"><i class="fa-solid fa-users"></i></div><div class="kpi-label">بوابات النظام</div><div class="kpi-value">4</div><div class="small-muted">التسجيل، بيانات الطالب، الإنجازات، العاملون</div></div></div>
+                  <div class="col-6"><div class="kpi-card quick-shadow"><div class="bg-icon-float"><i class="fa-solid fa-comment-dots"></i></div><div class="kpi-label">التواصل</div><div class="kpi-value">واتساب</div><div class="small-muted">من القوالب</div></div></div>
+                  <div class="col-6"><div class="kpi-card quick-shadow"><div class="bg-icon-float"><i class="fa-solid fa-file-export"></i></div><div class="kpi-label">التصدير</div><div class="kpi-value">CSV/XLSX</div><div class="small-muted">من الواجهة</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="registerView" class="view-section d-none section-space">
+      <div class="container">
+        <div class="panel-card">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+            <div><h2 class="section-title mb-1">بوابة التسجيل والقبول</h2><div class="small-muted">أرسل طلب التسجيل وسيتم مراجعته من الإدارة.</div></div>
+          </div>
+          <form id="registrationForm" class="row g-3">
+            <div class="col-12"><h5 class="fw-bold mb-0">بيانات الطالب</h5></div>
+            <div class="col-md-6"><label class="form-label">اسم الطالب ثلاثي</label><input class="form-control" name="اسم الطالب ثلاثي" required></div>
+            <div class="col-md-6"><label class="form-label">هوية الطالب</label><input class="form-control" name="هوية الطالب" inputmode="numeric" required></div>
+            <div class="col-md-6"><label class="form-label">رقم جوال الطالب</label><input class="form-control" name="رقم جوال الطالب" inputmode="numeric"></div>
+            <div class="col-md-6"><label class="form-label">تاريخ ميلاد الطالب</label><input type="date" class="form-control" name="تاريخ ميلاد الطالب" required></div>
+            <div class="col-md-6"><label class="form-label">العنوان / الحي</label><input class="form-control" name="العنوان / الحي" required></div>
+            <div class="col-md-3"><label class="form-label">المرحلة الدراسية</label><select class="form-select" name="المرحلة الدراسية" id="selectLevel" required></select></div>
+            <div class="col-md-3"><label class="form-label">الصف الدراسي</label><select class="form-select" name="الصف الدراسي" id="selectGrade" required></select></div>
+            <div class="col-12 mt-2"><h5 class="fw-bold mb-0">بيانات ولي الأمر</h5></div>
+            <div class="col-md-6"><label class="form-label">اسم ولي الأمر ثلاثي</label><input class="form-control" name="اسم ولي الأمر ثلاثي" required></div>
+            <div class="col-md-6"><label class="form-label">رقم جوال ولي الأمر</label><input class="form-control" name="رقم جوال ولي الأمر" inputmode="numeric" required></div>
+            <div class="col-md-6"><label class="form-label">رقم هوية ولي الأمر</label><input class="form-control" name="رقم هوية ولي الأمر" inputmode="numeric" required></div>
+            <div class="col-md-6"><label class="form-label">صلة ولي الأمر</label><select class="form-select" name="صلة ولي الأمر" id="selectRelation" required></select></div>
+            <div class="col-12"><label class="form-label">ملاحظات</label><textarea class="form-control" name="ملاحظات"></textarea></div>
+            <div class="col-12"><button type="submit" class="btn btn-primary btn-lg"><i class="fa-solid fa-paper-plane ms-1"></i>إرسال الطلب</button></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="studentView" class="view-section d-none section-space">
+      <div class="container">
+        <div class="panel-card mb-3">
+          <h2 class="section-title mb-1">بوابة بيانات الطالب</h2>
+          <div class="small-muted mb-4">يمكن الاستعلام بهوية الطالب أو جوال ولي الأمر.</div>
+          <form id="studentLookupForm" class="row g-3 align-items-end">
+            <div class="col-md-5"><label class="form-label">هوية الطالب</label><input class="form-control" name="هوية الطالب"></div>
+            <div class="col-md-5"><label class="form-label">رقم جوال ولي الأمر</label><input class="form-control" name="رقم جوال ولي الأمر"></div>
+            <div class="col-md-2"><button class="btn btn-primary w-100" type="submit">بحث</button></div>
+          </form>
+        </div>
+        <div id="studentResult"></div>
+      </div>
+    </section>
+
+    <section id="achievementsView" class="view-section d-none section-space">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+          <div><h2 class="section-title mb-1">إنجازات المجمع</h2><div class="small-muted">شاشة عامة قابلة للتحديث من صفحة الإعدادات.</div></div>
+        </div>
+        <div id="achievementsContent"></div>
+      </div>
+    </section>
+
+    <section id="staffView" class="view-section d-none section-space">
+      <div class="container">
+        <div class="staff-shell">
+          <div class="staff-head d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div><h2 class="section-title mb-1">بوابة العاملين</h2><div class="small-muted" id="staffWelcome">—</div></div>
+            <div class="d-flex gap-2 flex-wrap">
+              <button class="btn btn-outline-success btn-sm" id="exportCsvBtn"><i class="fa-solid fa-file-csv ms-1"></i>CSV</button>
+              <button class="btn btn-outline-success btn-sm" id="exportExcelBtn"><i class="fa-solid fa-file-excel ms-1"></i>Excel</button>
+            </div>
+          </div>
+          <div class="staff-body">
+            <div class="row g-3 mb-3" id="dashboardStats"></div>
+            <ul class="nav nav-pills gap-2 flex-wrap" id="staffTabs">
+              <li class="nav-item"><button class="nav-link active" type="button" data-tab="studentsTab">الطلاب</button></li>
+              <li class="nav-item"><button class="nav-link" type="button" data-tab="requestsTab">الطلبات</button></li>
+              <li class="nav-item"><button class="nav-link" type="button" data-tab="eduWarningsTab">الإنذارات التعليمية</button></li>
+              <li class="nav-item"><button class="nav-link" type="button" data-tab="adminWarningsTab">الإنذارات الإدارية</button></li>
+              <li class="nav-item"><button class="nav-link" type="button" data-tab="notesTab">ملاحظات المعلمين</button></li>
+              <li class="nav-item"><button class="nav-link" type="button" data-tab="settingsTab">الإعدادات</button></li>
+              <li class="nav-item"><button class="nav-link" type="button" data-tab="logsTab">سجل العمليات</button></li>
+            </ul>
+            <div id="studentsTab" class="tab-pane-custom"></div>
+            <div id="requestsTab" class="tab-pane-custom d-none"></div>
+            <div id="eduWarningsTab" class="tab-pane-custom d-none"></div>
+            <div id="adminWarningsTab" class="tab-pane-custom d-none"></div>
+            <div id="notesTab" class="tab-pane-custom d-none"></div>
+            <div id="settingsTab" class="tab-pane-custom d-none"></div>
+            <div id="logsTab" class="tab-pane-custom d-none"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer-note">جميع الحقوق محفوظة — نظام مجمع حلق تحفيظ القرآن</footer>
+
+  <div class="modal fade" id="staffLoginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow-lg">
+        <div class="modal-header bg-primary text-white"><h5 class="modal-title fw-bold">دخول العاملين</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body p-4">
+          <form id="staffLoginForm">
+            <div class="mb-3"><label class="form-label">رمز الدخول</label><input id="staffCode" class="form-control" type="password" required></div>
+            <button class="btn btn-primary w-100" type="submit">دخول</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
