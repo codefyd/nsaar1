@@ -140,6 +140,33 @@
     return Number(v || 0) || 0;
   }
 
+  function toArray(value) {
+  if (Array.isArray(value)) return value;
+  if (value == null || value === '') return [];
+  if (typeof value === 'string') {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (_) {
+      return [];
+    }
+  }
+  return [];
+}
+
+function toObject(value) {
+  if (value && typeof value === 'object' && !Array.isArray(value)) return value;
+  if (typeof value === 'string') {
+    try {
+      const parsed = JSON.parse(value);
+      return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+    } catch (_) {
+      return {};
+    }
+  }
+  return {};
+}
+  
   function roleCan(...roles) {
     return roles.includes(state.userRole);
   }
@@ -221,42 +248,42 @@
   }
 
   function renderAchievements(data) {
-    const d = data || {};
-    const target = byId('achievementsContent');
-    if (!target) return;
+  const d = toObject(data || {});
+  const target = byId('achievementsContent');
+  if (!target) return;
 
-    const stats = Array.isArray(d['بطاقات الإحصاء']) ? d['بطاقات الإحصاء'] : [];
-    const items = Array.isArray(d['الإنجازات النصية']) ? d['الإنجازات النصية'] : [];
+  const stats = toArray(d['بطاقات الإحصاء']);
+  const items = toArray(d['الإنجازات النصية']);
 
-    target.innerHTML = `
-      <div class="panel-card mb-3">
-        <h2 class="section-title mb-2">${htmlEscape(d['عنوان الصفحة'] || 'إنجازات المجمع')}</h2>
-        <div class="small-muted">${htmlEscape(d['وصف الصفحة'] || '')}</div>
-      </div>
+  target.innerHTML = `
+    <div class="panel-card mb-3">
+      <h2 class="section-title mb-2">${htmlEscape(d['عنوان الصفحة'] || 'إنجازات المجمع')}</h2>
+      <div class="small-muted">${htmlEscape(d['وصف الصفحة'] || '')}</div>
+    </div>
 
-      <div class="row g-3 mb-3">
-        ${stats.map(x => statCard(
-          x['العنوان'] || '—',
-          x['القيمة'] || 0,
-          x['أيقونة'] || 'fa-star',
-          x['وصف'] || ''
-        )).join('')}
-      </div>
+    <div class="row g-3 mb-3">
+      ${stats.map(x => statCard(
+        x['العنوان'] || '—',
+        x['القيمة'] || 0,
+        x['أيقونة'] || 'fa-star',
+        x['وصف'] || ''
+      )).join('')}
+    </div>
 
-      <div class="panel-card">
-        <h5 class="mb-3">أبرز الإنجازات</h5>
-        ${
-          items.length
-            ? items.map(t => `
-              <div class="mb-3 border rounded-4 p-3">
-                <i class="fa-solid fa-check text-success ms-2"></i>${htmlEscape(t)}
-              </div>
-            `).join('')
-            : '<div class="text-muted">لا توجد بيانات حالياً</div>'
-        }
-      </div>
-    `;
-  }
+    <div class="panel-card">
+      <h5 class="mb-3">أبرز الإنجازات</h5>
+      ${
+        items.length
+          ? items.map(t => `
+            <div class="mb-3 border rounded-4 p-3">
+              <i class="fa-solid fa-check text-success ms-2"></i>${htmlEscape(t)}
+            </div>
+          `).join('')
+          : '<div class="text-muted">لا توجد بيانات حالياً</div>'
+      }
+    </div>
+  `;
+}
 
   function route() {
     const view = (location.hash || '#/home').replace('#/', '');
@@ -349,10 +376,10 @@
   }
 
   function renderStudents() {
-    const target = byId('studentsTab');
-    if (!target) return;
+  const target = byId('studentsTab');
+  if (!target) return;
 
-    const students = state.bundle?.['الطلاب'] || [];
+  const students = toArray(state.bundle?.['الطلاب']);
     const rows = students.map(s => `
       <tr>
         <td>
@@ -625,10 +652,10 @@
   }
 
   function renderRequests() {
-    const target = byId('requestsTab');
-    if (!target) return;
+  const target = byId('requestsTab');
+  if (!target) return;
 
-    const items = state.bundle?.['الطلبات الواردة'] || [];
+  const items = toArray(state.bundle?.['الطلبات الواردة']);
     const rows = items.map(r => `
       <tr>
         <td>${htmlEscape(r['رقم الطلب'] || '')}</td>
@@ -728,9 +755,9 @@
 
   function renderEduWarnings() {
     const target = byId('eduWarningsTab');
-    if (!target) return;
+  if (!target) return;
 
-    const items = state.bundle?.['الإنذارات التعليمية'] || [];
+  const items = toArray(state.bundle?.['الإنذارات التعليمية']);
     const rows = items.map(r => `
       <tr>
         <td>${htmlEscape(r['اسم الطالب'] || r['اسم الطالب ثلاثي'] || '')}</td>
@@ -814,10 +841,10 @@
   }
 
   function renderAdminWarnings() {
-    const target = byId('adminWarningsTab');
-    if (!target) return;
+   const target = byId('adminWarningsTab');
+  if (!target) return;
 
-    const items = state.bundle?.['الإنذارات الإدارية'] || [];
+  const items = toArray(state.bundle?.['الإنذارات الإدارية']);
     const rows = items.map(r => `
       <tr>
         <td>${htmlEscape(r['اسم الطالب'] || r['اسم الطالب ثلاثي'] || '')}</td>
@@ -912,9 +939,9 @@
 
   function renderNotes() {
     const target = byId('notesTab');
-    if (!target) return;
+  if (!target) return;
 
-    const items = state.bundle?.['ملاحظات المعلمين'] || [];
+  const items = toArray(state.bundle?.['ملاحظات المعلمين']);
     const rows = items.map(r => `
       <tr>
         <td>${htmlEscape(r['اسم الطالب'] || r['اسم الطالب ثلاثي'] || '')}</td>
@@ -978,39 +1005,42 @@
   }
 
   function renderSettingBadges(items = []) {
-    return (items || []).map(v => `<span class="item">${htmlEscape(v)}</span>`).join('') || '<div class="text-muted">لا توجد بيانات</div>';
-  }
-
+  items = toArray(items);
+  return items.map(v => `<span class="item">${htmlEscape(v)}</span>`).join('') || '<div class="text-muted">لا توجد بيانات</div>';
+}
   function renderUsersPreview(items = []) {
-    return (items || []).slice(0, 6).map(u => `
-      <div class="official-mini mb-2">
-        <div class="text">
-          <h6>${htmlEscape(u['الاسم'] || '')}</h6>
-          <p>${htmlEscape(u['الوظيفة'] || '')}${u['الحلقة'] ? ` — ${htmlEscape(u['الحلقة'])}` : ''}</p>
-        </div>
-        <div class="icon"><i class="fa-solid fa-user"></i></div>
+  items = toArray(items);
+  return items.slice(0, 6).map(u => `
+    <div class="official-mini mb-2">
+      <div class="text">
+        <h6>${htmlEscape(u['الاسم'] || '')}</h6>
+        <p>${htmlEscape(u['الوظيفة'] || '')}${u['الحلقة'] ? ` — ${htmlEscape(u['الحلقة'])}` : ''}</p>
       </div>
-    `).join('') || '<div class="text-muted">لا يوجد مستخدمون</div>';
-  }
+      <div class="icon"><i class="fa-solid fa-user"></i></div>
+    </div>
+  `).join('') || '<div class="text-muted">لا يوجد مستخدمون</div>';
+}
 
   function renderTemplatesPreview(items = []) {
-    return (items || []).slice(0, 5).map(t => `
-      <div class="mb-2">
-        <strong>${htmlEscape(t['الاسم'] || '')}</strong>
-        <div class="small-muted">${htmlEscape(t['المفتاح'] || '')}</div>
-      </div>
-    `).join('') || '<div class="text-muted">لا توجد قوالب</div>';
-  }
+  items = toArray(items);
+  return items.slice(0, 5).map(t => `
+    <div class="mb-2">
+      <strong>${htmlEscape(t['الاسم'] || '')}</strong>
+      <div class="small-muted">${htmlEscape(t['المفتاح'] || '')}</div>
+    </div>
+  `).join('') || '<div class="text-muted">لا توجد قوالب</div>';
+}
 
   function renderThresholdsPreview(items = []) {
-    return (items || []).slice(0, 6).map(t => `
-      <div class="mb-2">
-        <strong>${htmlEscape(t['النوع'] || '')}</strong>
-        — العتبة ${htmlEscape(t['رقم العتبة'] || '')}
-        — العدد ${htmlEscape(t['العدد'] || '')}
-      </div>
-    `).join('') || '<div class="text-muted">لا توجد عتبات</div>';
-  }
+  items = toArray(items);
+  return items.slice(0, 6).map(t => `
+    <div class="mb-2">
+      <strong>${htmlEscape(t['النوع'] || '')}</strong>
+      — العتبة ${htmlEscape(t['رقم العتبة'] || '')}
+      — العدد ${htmlEscape(t['العدد'] || '')}
+    </div>
+  `).join('') || '<div class="text-muted">لا توجد عتبات</div>';
+}
 
   function renderAchievementSettingPreview(obj = {}) {
     const stats = Array.isArray(obj['بطاقات الإحصاء']) ? obj['بطاقات الإحصاء'].length : 0;
@@ -1110,9 +1140,9 @@
 
   function renderLogs() {
     const target = byId('logsTab');
-    if (!target) return;
+  if (!target) return;
 
-    const items = state.bundle?.['سجل العمليات'] || [];
+  const items = toArray(state.bundle?.['سجل العمليات']);
     const rows = items.map(r => `
       <tr>
         <td>${htmlEscape(r['العملية'] || '')}</td>
